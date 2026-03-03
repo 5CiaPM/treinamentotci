@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCI 2026 — Calendário 1º Semestre</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy2: #0f1f3d;
+    --gold: #c8a84b;
+    --gold2: #e8c96b;
+    --red: #b22222;
+    --steel: #2a3f5f;
+    --light: #e8edf5;
+    --muted: #8a9ab5;
+    --white: #f5f7fa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Source Sans 3', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 40px,
+      rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px
+    ), repeating-linear-gradient(
+      90deg, transparent, transparent 40px,
+      rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap { position: relative; z-index: 1; max-width: 1300px; margin: 0 auto; padding: 0 24px 60px; }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px 0 24px;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .header-badge {
+    width: 72px; height: 72px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: var(--navy);
+    text-align: center;
+    line-height: 1.2;
+    padding: 8px;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 24px rgba(200,168,75,0.4);
+  }
+
+  .header-text { flex: 1; min-width: 200px; }
+
+  .header-text .sup {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .header-text h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+
+  .header-text h1 span { color: var(--gold); }
+
+  .header-text .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  .header-year {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--gold);
+    opacity: 0.3;
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* GRID LAYOUT */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 28px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  /* MONTH SECTION */
+  .month-block {
+    margin-bottom: 28px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .month-block:nth-child(1) { animation-delay: 0.05s }
+  .month-block:nth-child(2) { animation-delay: 0.10s }
+  .month-block:nth-child(3) { animation-delay: 0.15s }
+  .month-block:nth-child(4) { animation-delay: 0.20s }
+  .month-block:nth-child(5) { animation-delay: 0.25s }
+  .month-block:nth-child(6) { animation-delay: 0.30s }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .month-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .month-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+
+  .month-divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--steel), transparent);
+  }
+
+  .month-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 2px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  /* TRAINING TABLE */
+  .training-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .training-table tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  .training-table tr:hover {
+    background: rgba(200,168,75,0.05);
+  }
+
+  .training-table td {
+    padding: 9px 12px;
+    vertical-align: middle;
+  }
+
+  .td-period {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+    width: 150px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .td-num {
+    width: 90px;
+  }
+
+  .training-num {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--light);
+    letter-spacing: 1px;
+  }
+
+  .training-num .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,168,75,0.12);
+    border: 1px solid rgba(200,168,75,0.3);
+    color: var(--gold2);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 3px;
+    transition: all 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-link:hover {
+    background: rgba(200,168,75,0.25);
+    border-color: var(--gold);
+    color: var(--white);
+    transform: translateX(2px);
+  }
+
+  .btn-link svg {
+    width: 10px; height: 10px; flex-shrink: 0;
+  }
+
+  /* SIDEBAR */
+  .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+  .side-card {
+    background: var(--navy2);
+    border: 1px solid var(--steel);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease 0.3s both;
+  }
+
+  .side-card-header {
+    background: var(--steel);
+    padding: 12px 16px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .side-card-header .icon { font-size: 16px; }
+
+  .side-card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+
+  /* Sidebar items */
+  .side-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .side-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .side-item-label {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* HIGHLIGHT CARD */
+  .highlight-card {
+    background: linear-gradient(135deg, var(--red) 0%, #8b0000 100%);
+    border: none;
+  }
+
+  .highlight-card .side-card-header { background: rgba(0,0,0,0.3); }
+
+  .highlight-card .side-item-label { color: rgba(255,255,255,0.8); }
+
+  /* POP CARD */
+  .pop-card .pop-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .pop-card .pop-item:last-child { border-bottom: none; }
+
+  .pop-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  /* DEFESA PESSOAL TOPICS */
+  .topic-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .topic-item:last-child { border-bottom: none; }
+  .topic-period { font-size: 10px; color: var(--gold); font-weight: 600; letter-spacing: 1px; margin-bottom: 2px; }
+  .topic-name { font-size: 12px; color: var(--light); line-height: 1.4; }
+
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header>
+    <div class="header-badge">PMSP<br>PMESP<br>DEC</div>
+    <div class="header-text">
+      <div class="sup">Polícia Militar do Estado de São Paulo · Escola de Educação Física</div>
+      <h1>Treinamento Continuado <span>Institucional</span></h1>
+      <div class="sub">Setor de Desenvolvimento e Controle · 1º Semestre de 2026</div>
+    </div>
+    <div class="header-year">2026</div>
+  </header>
+
+  <div class="main-grid">
+    <!-- LEFT COLUMN: Monthly training schedule -->
+    <div class="left-col">
+
+      <!-- JANEIRO -->
+      <div class="month-block">
+        <div class="month-header">
+          <span class="month-name">Janeiro</span>
+          <div class="month-divider"></div>
+          <span class="month-tag">JAN 26</span>
+        </div>
+        <table class="training-table">
+          <tr>
+            <td class="td-period">01 a 04 JAN</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 01</span></td>
+            <td><a class="btn-link" href="https://drive.google.com/file/d/1w8E62wIxEolcEZRkUNVPGxmknBxnYTuL/view" title="Treino 01 - Janeiro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+          <tr>
+            <td class="td-period">05 a 08 JAN</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 02</span></td>
+            <td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+          <tr>
+            <td class="td-period">09 a 12 JAN</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 03</span></td>
+            <td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+          <tr>
+            <td class="td-period">13 a 16 JAN</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 04</span></td>
+            <td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+          <tr>
+            <td class="td-period">17 a 20 JAN</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 05</span></td>
+            <td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+          <tr>
+            <td class="td-period">21 a 24 JAN</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 06</span></td>
+            <td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+          <tr>
+            <td class="td-period">25 a 28 JAN</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 07</span></td>
+            <td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+          <tr>
+            <td class="td-period">29 JAN a 01 FEV</td>
+            <td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 08</span></td>
+            <td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- FEVEREIRO -->
+      <div class="month-block">
+        <div class="month-header">
+          <span class="month-name">Fevereiro</span>
+          <div class="month-divider"></div>
+          <span class="month-tag">FEV 26</span>
+        </div>
+        <table class="training-table">
+          <tr><td class="td-period">02 a 05 FEV</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 09</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">06 a 09 FEV</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 10</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">10 a 13 FEV</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 11</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">14 a 17 FEV</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 12</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">18 a 21 FEV</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 13</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">22 a 25 FEV</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 14</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+        </table>
+      </div>
+
+      <!-- MARÇO -->
+      <div class="month-block">
+        <div class="month-header">
+          <span class="month-name">Março</span>
+          <div class="month-divider"></div>
+          <span class="month-tag">MAR 26</span>
+        </div>
+        <table class="training-table">
+          <tr><td class="td-period">26 FEV a 01 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 15</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">02 a 05 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 16</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">06 a 09 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 17</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">10 a 13 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 18</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">14 a 17 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 19</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">18 a 21 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 20</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">22 a 25 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 21</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">26 a 29 MAR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 22</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+        </table>
+      </div>
+
+      <!-- ABRIL -->
+      <div class="month-block">
+        <div class="month-header">
+          <span class="month-name">Abril</span>
+          <div class="month-divider"></div>
+          <span class="month-tag">ABR 26</span>
+        </div>
+        <table class="training-table">
+          <tr><td class="td-period">30 MAR a 02 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 23</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">03 a 06 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 24</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">07 a 10 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 25</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">11 a 14 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 26</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">15 a 18 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 27</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">19 a 22 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 28</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">23 a 26 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 29</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">27 a 30 ABR</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 30</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+        </table>
+      </div>
+
+      <!-- MAIO -->
+      <div class="month-block">
+        <div class="month-header">
+          <span class="month-name">Maio</span>
+          <div class="month-divider"></div>
+          <span class="month-tag">MAI 26</span>
+        </div>
+        <table class="training-table">
+          <tr><td class="td-period">01 a 04 MAI</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 31</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">05 a 08 MAI</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 32</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">09 a 12 MAI</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 33</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">13 a 16 MAI</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 34</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">17 a 20 MAI</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 35</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">21 a 24 MAI</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 36</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">25 a 28 MAI</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 37</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">29 MAI a 01 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 38</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+        </table>
+      </div>
+
+      <!-- JUNHO -->
+      <div class="month-block">
+        <div class="month-header">
+          <span class="month-name">Junho</span>
+          <div class="month-divider"></div>
+          <span class="month-tag">JUN 26</span>
+        </div>
+        <table class="training-table">
+          <tr><td class="td-period">02 a 05 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 39</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">06 a 09 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 40</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">10 a 13 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 41</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">14 a 17 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 42</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">18 a 21 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 43</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">22 a 25 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 44</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+          <tr><td class="td-period">26 a 30 JUN</td><td class="td-num"><span class="training-num"><span class="dot"></span>TREINO 45</span></td><td><a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a></td></tr>
+        </table>
+      </div>
+
+    </div><!-- end left-col -->
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- DIREÇÃO DEFENSIVA -->
+      <div class="side-card highlight-card">
+        <div class="side-card-header">
+          <span class="icon">🚗</span> Direção Defensiva
+        </div>
+        <div class="side-card-body">
+          <div class="side-item">
+            <div class="side-item-label">Primeiro Treino Semestral de Direção Preventiva</div>
+            <div style="margin-top:4px; font-size:10px; color:rgba(255,255,255,0.6); font-style:italic;">*Aulas ministradas por policiais formados no CEP de docência em técnicas de direção policial preventiva.</div>
+            <a class="btn-link" href="#" style="margin-top:8px; background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.4); color:#fff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar Conteúdo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIRO -->
+      <div class="side-card highlight-card" style="background: linear-gradient(135deg, #1a3a1a 0%, #0d200d 100%);">
+        <div class="side-card-header" style="background:rgba(0,0,0,0.4);">
+          <span class="icon">🎯</span> Tiro
+        </div>
+        <div class="side-card-body">
+          <div class="side-item">
+            <div class="side-item-label">Primeiro Treino Semestral de Tiro</div>
+            <a class="btn-link" href="#" style="margin-top:8px; background:rgba(50,200,50,0.15); border-color:rgba(50,200,50,0.4); color:#90ee90;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar Conteúdo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NORMAS / POPs -->
+      <div class="side-card pop-card">
+        <div class="side-card-header">
+          <span class="icon">📋</span> Normas / POPs
+        </div>
+        <div class="side-card-body">
+          <div class="pop-item">
+            <div>
+              <div class="pop-name">POP 5.03.00</div>
+              <div style="font-size:11px; color:var(--muted);">Procedimentos Operacionais</div>
+            </div>
+            <a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Ver</a>
+          </div>
+          <div class="pop-item">
+            <div>
+              <div class="pop-name">POP 5.13.00</div>
+              <div style="font-size:11px; color:var(--muted);">Procedimentos Operacionais</div>
+            </div>
+            <a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Ver</a>
+          </div>
+          <div class="pop-item">
+            <div>
+              <div class="pop-name">POP 5.21.00</div>
+              <div style="font-size:11px; color:var(--muted);">Procedimentos Operacionais</div>
+            </div>
+            <a class="btn-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Ver</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSUNTO ESPECÍFICO: TPOP/TDPP -->
+      <div class="side-card">
+        <div class="side-card-header">
+          <span class="icon">📚</span> Assuntos Específicos
+        </div>
+        <div class="side-card-body" style="padding: 10px 16px;">
+
+          <div style="font-size:10px; font-weight:700; letter-spacing:1.5px; color:var(--gold); margin-bottom:6px; text-transform:uppercase;">Proc. Operacionais (Jan–Fev)</div>
+          <div class="topic-item">
+            <div class="topic-name">Progressão em ambientes</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+          <div class="topic-item">
+            <div class="topic-name">Transposição de obstáculo</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+          <div class="topic-item">
+            <div class="topic-name">Deslocamento em escada</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+          <div class="topic-item">
+            <div class="topic-name">Entrada em ambientes fechados</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+
+          <div style="font-size:10px; font-weight:700; letter-spacing:1.5px; color:var(--gold); margin: 12px 0 6px; text-transform:uppercase;">Defesa Pessoal (Mar–Abr)</div>
+          <div class="topic-item">
+            <div class="topic-name">Verificação e checagem da arma TASER X-2</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+          <div class="topic-item">
+            <div class="topic-name">Utilização da AIN no auxílio às imobilizações</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+          <div class="topic-item">
+            <div class="topic-name">Manutenção da TASER X-2</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+
+          <div style="font-size:10px; font-weight:700; letter-spacing:1.5px; color:var(--gold); margin: 12px 0 6px; text-transform:uppercase;">Proc. Operacionais (Mai–Jun)</div>
+          <div class="topic-item">
+            <div class="topic-name">Posicionamento das algemas no porta-algemas</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+          <div class="topic-item">
+            <div class="topic-name">Ato de algemar</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+          <div class="topic-item">
+            <div class="topic-name">Ato de retirada das algemas</div>
+            <a class="btn-link" href="#" style="margin-top:5px; font-size:10px; padding:4px 10px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Acessar</a>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- end main-grid -->
+
+  <footer style="text-align:center; padding:24px 0 0; border-top:1px solid var(--steel); margin-top:16px;">
+    <p style="font-size:11px; color:var(--muted); letter-spacing:1px;">POLÍCIA MILITAR DO ESTADO DE SÃO PAULO · DIRETORIA DE EDUCAÇÃO E CULTURA · 1º SEMESTRE 2026</p>
+  </footer>
+
+</div>
+</body>
+</html>
